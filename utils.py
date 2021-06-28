@@ -44,6 +44,7 @@ def processData(data, ticker, month, year):
     df.columns = colnames
     df.index = pd.to_datetime(df.index)
   else:
+    print("Something is wrong with the raw data !")
     return None
 
   # data available only for 2014-2021
@@ -55,7 +56,7 @@ def processData(data, ticker, month, year):
       dfm = df.loc[(df.index.year == year) & (df.index.month== month)]
       return dfm
   except:
-      print("Sorry data outside the 2014-2021 timeframe is not available!")
+      flash("Sorry data outside the 2014-2021 timeframe is not available!")
       return None
 
 def graph(dataframe, features, ticker, month, year):
