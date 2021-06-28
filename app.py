@@ -39,7 +39,7 @@ def next():
       err = f':(....Sorry data requested for {ticker} is not avilable for {month} {year}'
     return render_template('error.html',msg=err)
 
-  return render_template('stockchart.html', script = script, div= div, cdn_js=cdn_js, cdn_css=cdn_css) 
+  return render_template('stockchart.html', stock=ticker, script = script, div= div, cdn_js=cdn_js, cdn_css=cdn_css) 
 
 
 if __name__ == '__main__':
