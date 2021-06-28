@@ -37,11 +37,14 @@ def processData(data, ticker, month, year):
   month = month_to_num[month]
   year = int(year)
 
-  df = pd.DataFrame(data).transpose() 
-  colnames = ['open','high','low','close','adj_close']
-  df = df.iloc[:,:-3]
-  df.columns = colnames
-  df.index = pd.to_datetime(df.index)
+  if data is not None:
+    df = pd.DataFrame(data).transpose() 
+    colnames = ['open','high','low','close','adj_close']
+    df = df.iloc[:,:-3]
+    df.columns = colnames
+    df.index = pd.to_datetime(df.index)
+  else:
+    return None
 
   # data available only for 2014-2021
   try:
