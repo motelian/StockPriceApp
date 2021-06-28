@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href={{cdn_css | safe}} />
+<script type="text/javascript" src={{cdn_js | safe}} ></script>
+
+<h1>Welcome</h1>
+<p>This is the home page</p>
+
+{{script | safe}}
+{{div | safe}}
+
+<form id='nextstock' method='post' action='/' >
+  <p>
+    <input type='submit' value='Next Stock?' />
+  </p>
+</form>
+
+{% endblock content %}
+
