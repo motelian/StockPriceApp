@@ -1,9 +1,34 @@
+import requests
+import os
+import pandas as pd
+from dotenv import load_dotenv, find_dotenv
 from bokeh.plotting import figure
 from bokeh.embed import components
 from bokeh.palettes import Spectral4
 from bokeh.resources import CDN
 
-def getData(timeseries, ticker, month, year):
+def getData(ticker):
+
+  load_dotenv(find_dotenv())
+  apikey = os.environ.get("ALPHA_VANTAGE_API_KEY")
+
+  # Accordong to the alphavantage documentation website
+  function   = 'TIME_SERIES_DAILY_ADJUSTED'
+  outputsize = 'full'
+  url = f'https://www.alphavantage.co/query?function={function}&symbol={ticker}&outputsize={outputsize}&apikey={apikey}'
+  
+  rawdata = requests.get(url)
+  data = rawdata.json()
+
+  # check for valid json output
+  if 'Error Message' in data:
+      print(data['Error Message'])
+      return None
+
+  return data['Time Series (Daily)']
+
+
+def processData(data, ticker, month, year):
   ''' get data for a ticker label for specific month and year '''
 
   month_to_num = {'January':1, 'February':2, 'March':3, 'April':4, 'May':5, 'June':6, 'July':7,
@@ -12,12 +37,11 @@ def getData(timeseries, ticker, month, year):
   month = month_to_num[month]
   year = int(year)
 
-  data, meta_data = timeseries.get_daily_adjusted(ticker,outputsize='full')
-
-
+  df = pd.DataFrame(data).transpose() 
   colnames = ['open','high','low','close','adj_close']
-  df = data.iloc[:,:-3].copy()
+  df = df.iloc[:,:-3]
   df.columns = colnames
+  df.index = pd.to_datetime(df.index)
 
   # data available only for 2014-2021
   try:
